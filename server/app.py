@@ -19,15 +19,41 @@ def home():
 
 @app.route('/animal/<int:id>')
 def animal_by_id(id):
-    return ''
+    q = Animal.query.filter_by(id=id).first()
+    
+    return f'''
+    <ul>ID: {q.id}</ul>
+    <ul>Name: {q.name}</ul>
+    <ul>Species: {q.species}</ul>
+    <ul>Zookeeper: {q.zookeeper.name}</ul>
+    <ul>Enclosure: {q.enclosure.environment}</ul>
+    '''
 
 @app.route('/zookeeper/<int:id>')
 def zookeeper_by_id(id):
-    return ''
+    q = Zookeeper.query.filter_by(id=id).first()
+    return_string = f'''
+    <ul>ID: {q.id}</ul>
+    <ul>Name: {q.name}</ul>
+    <ul>Birthday: {q.birthday}</ul>'''
+    for animal in q.animals:
+        return_string += f'<ul>Animal: {animal.name}</ul>'
+    
+    return return_string
+    
 
 @app.route('/enclosure/<int:id>')
 def enclosure_by_id(id):
-    return ''
+    q = Enclosure.query.filter_by(id=id).first()
+    return_string = f'''
+    <ul>ID: {q.id}</ul>
+    <ul>Environment: {q.environment}</ul>
+    <ul>Open to Visitors: {q.open_to_visitors}</ul>'''
+    for animal in q.animals:
+        return_string += f'<ul>Animal: {animal.name}</ul>'
+    
+    return return_string
+    
 
 
 if __name__ == '__main__':
